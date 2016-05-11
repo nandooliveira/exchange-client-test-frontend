@@ -1,4 +1,22 @@
 <div class="col-sm-12 main">
   &nbsp;
   <h1 class="page-header">Dashboard</h1>
+  <h4>Current Quotation:</h4>
+  <div class="col-sm-12 jumbotron">
+    <div class="col-sm-2" ng-repeat="value in currentRates">
+      <h5>{{value.vetProvider}} <small style="color:green">{{value.symbol}} {{value.rate}}</small></h5>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <hr />
+  </div>
+
+  <div class="col-sm-12">
+    <div class="col-sm-4">
+      <select  ng-model="selectedItem" ng-change="loadChart()" class="form-control">
+        <option ng-repeat="item in periodOptions" ng-selected="selectedItem == item.value" value="{{item.value}}">{{item.label}}</option>
+      </select>
+    </div>
+    <canvas id="mainChart" style="width: 100px; height:80px"></canvas>
+  </div>
 </div>

@@ -81,7 +81,7 @@ angular.module('myApp.dashboard', ['ngRoute'])
 
 
   .factory('exchangeRateService', ['$q', '$http', function ($q, $http) {
-    var BASE_URL = "http://localhost:5000/api/v1/exchange_rate";
+    var BASE_URL = "http://floating-spire-61246.herokuapp.com/api/v1/exchange_rate";
     var factory = {};
     factory.loadAll = function (selectedItem) {
       var result = $q.defer();

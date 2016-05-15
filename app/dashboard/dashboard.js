@@ -89,7 +89,7 @@ angular.module('myApp.dashboard', ['ngRoute'])
 			var graphData = [];
 			var auxDate = "";
 			var auxValues = [];
-	  
+
 			for (var i in data) {
 
 				var quotation = data[i];
@@ -100,26 +100,26 @@ angular.module('myApp.dashboard', ['ngRoute'])
 				if (newDate != auxDate) {
 
 					var hasValues = false; //auxialiry value o say if this day has variation
-					
+
 					for (var i in quotation.rates) {
 						var rate = quotation.rates[i];
 
 						if (!graphData[rate.vetProvider])
-							graphData[rate.vetProvider] = [];
-			
+						graphData[rate.vetProvider] = [];
+
 						if (!auxValues[rate.vetProvider])
-							auxValues[rate.vetProvider] = 0.0;		
-						
+						auxValues[rate.vetProvider] = 0.0;
+
 						if (rate.rate != auxValues[rate.vetProvider]) {
 							graphData[rate.vetProvider].push(rate.rate);
 							auxValues[rate.vetProvider] = rate.rate;
 							hasValues = true;
 						}
 					}
-					
+
 					if (hasValues)
-						labels.push(newDate);
-					
+					labels.push(newDate);
+
 					auxDate = newDate;
 				}
 			}
@@ -157,9 +157,7 @@ angular.module('myApp.dashboard', ['ngRoute'])
 					skipXLabels: 5,
 					scales: {
 						yAxes: [{
-							ticks: {
-								beginAtZero:true
-							}
+							ticks: { beginAtZero:true }
 						}]
 					}
 				}
@@ -187,14 +185,12 @@ angular.module('myApp.dashboard', ['ngRoute'])
 			if (selectedItem == null || selectedItem == "today") {
 				var today = datetime.toISOString().slice(0,10)
 				url += '?datetime=' + today;
-			} else if (selectedItem == "week") {
-				// get first and last day of current week
-				var curr = new Date();
-				var first = curr.getDate() - curr.getDay();
-				var last = first + 6;
+			} else if (selectedItem == "week") { // Data from last 7 days
 
-				var firstday = new Date(curr.setDate(first));
-				var lastday = new Date(curr.setDate(last));
+				var dateOffset = (24*60*60*1000) * 7; //5 days
+				var firstday = new Date();
+				firstday.setTime(firstday.getTime() - dateOffset);
+				var lastday = new Date();
 
 				url += '/' + firstday.toISOString().slice(0,10) + "/" + lastday.toISOString().slice(0,10);
 			} else if (selectedItem == "month") {
@@ -233,5 +229,4 @@ angular.module('myApp.dashboard', ['ngRoute'])
 		}
 
 		return factory;
-	}])
-	;
+	}]);

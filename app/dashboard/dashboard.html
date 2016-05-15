@@ -4,7 +4,7 @@
   <h4>Current Quotation:</h4>
   <div class="col-sm-12 jumbotron">
     <div class="col-sm-2" ng-repeat="value in currentRates">
-      <h5>{{value.vetProvider}} <small style="color:green">{{value.symbol}} {{value.rate}}</small></h5>
+	    <h5><span class="capitalize">{{value.vetProvider}}</span> <small style="color:green">{{value.symbol}} {{value.rate}}</small></h5>
     </div>
   </div>
   <div class="col-sm-12">

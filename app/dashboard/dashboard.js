@@ -55,8 +55,9 @@ angular.module('myApp.dashboard', ['ngRoute'])
         }
       }
 
+      if ($scope.mainChart) {$scope.mainChart.destroy()}
       var ctx = $("#mainChart");
-      var myChart = new Chart(ctx, {
+      $scope.mainChart = new Chart(ctx, {
         type: 'line',
         data: {
           labels: labels,
@@ -121,14 +122,13 @@ angular.module('myApp.dashboard', ['ngRoute'])
             fill:false
           }
         );
-        console.log(strokecolors[i]);
         i++;
       }
 
-      console.log(datasets);
+      if ($scope.comparativeChart) { $scope.comparativeChart.destroy() }
 
       var ctx = $("#comparativeChart");
-      var myChart = new Chart(ctx, {
+      $scope.comparativeChart = new Chart(ctx, {
         type: 'line',
         data: {
           labels: labels,

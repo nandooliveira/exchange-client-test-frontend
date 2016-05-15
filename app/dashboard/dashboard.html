@@ -12,11 +12,20 @@
   </div>
 
   <div class="col-sm-12">
-    <div class="col-sm-4">
+    <div class="col-sm-2">
       <select  ng-model="selectedItem" ng-change="loadChart()" class="form-control">
         <option ng-repeat="item in periodOptions" ng-selected="selectedItem == item.value" value="{{item.value}}">{{item.label}}</option>
       </select>
     </div>
-    <canvas id="mainChart" style="width: 100px; height:80px"></canvas>
+
+    <div class="col-sm-12"></div>
+
+    <div class="col-sm-6">
+      <canvas id="mainChart" style="width: 100px; height:80px"></canvas>
+    </div>
+
+    <div class="col-sm-6">
+      <canvas id="comparativeChart" style="width: 100px; height:80px"></canvas>
+    </div>
   </div>
 </div>

@@ -32,6 +32,7 @@ angular.module('myApp.dashboard', ['ngRoute'])
 			function (data) {
 				mountChartOfCommercialQuotationByPeriod(data);
 				loadComparativeChart(data);
+				loadPercentualComparativeChart(data);
 			}, function (error) {
 				alert('erro: ' + error);
 			});
@@ -76,7 +77,7 @@ angular.module('myApp.dashboard', ['ngRoute'])
 					scales: {
 						yAxes: [{
 							ticks: {
-								beginAtZero:true
+								beginAtZero:false
 							}
 						}]
 					}
@@ -118,7 +119,7 @@ angular.module('myApp.dashboard', ['ngRoute'])
 					}
 
 					if (hasValues)
-					labels.push(newDate);
+						labels.push(newDate);
 
 					auxDate = newDate;
 				}
@@ -157,7 +158,88 @@ angular.module('myApp.dashboard', ['ngRoute'])
 					skipXLabels: 5,
 					scales: {
 						yAxes: [{
-							ticks: { beginAtZero:true }
+							ticks: { beginAtZero:false }
+						}]
+					}
+				}
+			});
+		}
+
+		function loadPercentualComparativeChart (data) {
+			var labels = [];
+			var graphData = [];
+			var auxDate = "";
+			var auxValues = [];
+			var firstValue = 0.0;
+
+			for (var i in data) {
+				var quotation = data[i];
+				var quant = $scope.selectedItem == "today" ? 16 : 10;
+				var newDate = quotation.datetime.slice(0, quant).replace("T", " ");
+
+				if (newDate != auxDate) {
+					var hasValues = false; //auxialiry value o say if this day has variation
+
+					for (var i in quotation.rates) {
+						var rate = quotation.rates[i];
+
+						if (!graphData[rate.vetProvider])
+							graphData[rate.vetProvider] = [];
+
+						if (!auxValues[rate.vetProvider])
+							auxValues[rate.vetProvider] = 0.0;
+
+						if (rate.rate != auxValues[rate.vetProvider]) {
+							if (auxValues[rate.vetProvider] != 0.0) {
+								var percentual = (rate.rate * 100) / auxValues[rate.vetProvider];
+								graphData[rate.vetProvider].push(parseFloat(percentual -100).toFixed(3));
+								hasValues = true;
+							}
+							auxValues[rate.vetProvider] = rate.rate;
+						}
+					}
+
+					if (hasValues)
+						labels.push(newDate);
+
+					auxDate = newDate;
+				}
+			}
+
+			var datasets = [];
+			var strokecolors = ['rgba(220,180,0,1)', 'rgba(235,19,66,1)', 'rgba(58,110,44,1)', 'rgba(148,52,148,1)', 'rgba(220,220,220,1)'];
+			var i = 0;
+
+			for (var key in graphData) {
+				datasets.push(
+					{
+						label: "% variation " + key,
+						data: graphData[key],
+						borderColor: strokecolors[i],
+						backgroundColor: strokecolors[i],
+						fill:false
+					}
+				);
+				i++;
+			}
+
+			if ($scope.percentualComparativeChart != null) { $scope.percentualComparativeChart.destroy(); }
+
+			var ctx = $("#percentualComparativeChart");
+			$scope.percentualComparativeChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: labels,
+					datasets: datasets
+				},
+				options: {
+					responsive: true,
+					showXLabels: 10,
+					skipXLabels: 5,
+					scales: {
+						label: "<%= ' ' + value%> %",
+						yAxes: [{
+							ticks: { beginAtZero:false },
 						}]
 					}
 				}

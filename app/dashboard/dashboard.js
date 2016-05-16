@@ -77,7 +77,10 @@ angular.module('myApp.dashboard', ['ngRoute'])
 					scales: {
 						yAxes: [{
 							ticks: {
-								beginAtZero:false
+								beginAtZero:false,
+								userCallback: function(value, index, values) {
+	                    return "R$ " + parseFloat(value).toFixed(2);
+	              }
 							}
 						}]
 					}
@@ -158,7 +161,12 @@ angular.module('myApp.dashboard', ['ngRoute'])
 					skipXLabels: 5,
 					scales: {
 						yAxes: [{
-							ticks: { beginAtZero:false }
+							ticks: {
+								beginAtZero:false,
+								userCallback: function(value, index, values) {
+	                    return "R$ " + parseFloat(value).toFixed(2);
+	              }
+							}
 						}]
 					}
 				}
@@ -237,9 +245,13 @@ angular.module('myApp.dashboard', ['ngRoute'])
 					showXLabels: 10,
 					skipXLabels: 5,
 					scales: {
-						label: "<%= ' ' + value%> %",
 						yAxes: [{
-							ticks: { beginAtZero:false },
+							ticks: {
+								beginAtZero:false,
+								userCallback: function(value, index, values) {
+	                    return "%" + parseFloat(value).toFixed(3);
+	              }
+							},
 						}]
 					}
 				}
